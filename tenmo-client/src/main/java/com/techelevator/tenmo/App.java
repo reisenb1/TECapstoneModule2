@@ -1,10 +1,14 @@
 package com.techelevator.tenmo;
 
 import com.techelevator.tenmo.model.AuthenticatedUser;
+import com.techelevator.tenmo.model.User;
 import com.techelevator.tenmo.model.UserCredentials;
 import com.techelevator.tenmo.services.AuthenticationService;
 import com.techelevator.tenmo.services.ConsoleService;
 import com.techelevator.tenmo.services.TenmoService;
+
+import java.math.BigDecimal;
+import java.util.List;
 
 public class App {
 
@@ -89,7 +93,6 @@ public class App {
     }
 
 	private void viewCurrentBalance() {
-		// TODO Auto-generated method stub
         String message = String.format("Your current account balance is: $%5.2f", tenmoService.getBalance());
         System.out.println("-----------------------------");
         System.out.println(message);
@@ -105,12 +108,29 @@ public class App {
 		
 	}
 
-	private void sendBucks() {
-		// TODO Auto-generated method stub
+	private void sendBucks(){
+        User[] users = tenmoService.getAllUsers();
+        consoleService.printAllUsers(users);
+
+        int userId = consoleService.promptForInt("Enter ID of user you are sending to (0 to cancel):");
+        if (userId == currentUser.getUser().getId()) {
+            System.out.println("Cannot transfer money to yourself.");
+            sendBucks();
+        }
+        BigDecimal amount = consoleService.promptForBigDecimal("Enter amount:");
+
+        if (amount.compareTo(new BigDecimal(0.00)) <= 0) {
+            System.out.println("Must transfer an amount over $0.00.");
+            sendBucks();
+        } else if (amount.compareTo(tenmoService.getBalance()) > 0) {
+            System.out.println("Cannot transfer more money than is in your account.");
+            sendBucks();
+        }
 		
 	}
 
 	private void requestBucks() {
+
 		// TODO Auto-generated method stub
 		
 	}

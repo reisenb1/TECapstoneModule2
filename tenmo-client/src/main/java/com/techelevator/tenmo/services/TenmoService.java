@@ -1,6 +1,7 @@
 package com.techelevator.tenmo.services;
 
 import com.techelevator.tenmo.model.Account;
+import com.techelevator.tenmo.model.User;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
@@ -9,6 +10,7 @@ import org.springframework.web.client.RestTemplate;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
+import java.util.List;
 
 public class TenmoService {
 
@@ -29,6 +31,16 @@ public class TenmoService {
         Account account = response.getBody();
 
         return account.getBalance();
+    }
+    public User[] getAllUsers () {
+        String url = String.format("%susers", API_BASE_URL);
+
+        ResponseEntity<User[]> response = restTemplate.exchange(url, HttpMethod.GET,
+                makeAuthEntity(), User[].class);
+        User[] users = response.getBody();
+
+        return users;
+
     }
 
     protected HttpEntity<Void> makeAuthEntity() {

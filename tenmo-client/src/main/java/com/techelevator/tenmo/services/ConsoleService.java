@@ -1,6 +1,7 @@
 package com.techelevator.tenmo.services;
 
 
+import com.techelevator.tenmo.model.User;
 import com.techelevator.tenmo.model.UserCredentials;
 
 import java.math.BigDecimal;
@@ -77,6 +78,17 @@ public class ConsoleService {
                 System.out.println("Please enter a decimal number.");
             }
         }
+    }
+
+    public void printAllUsers (User[] users) {
+        System.out.println("------------------------");
+        System.out.println("Users");
+        System.out.println("ID              Name");
+        System.out.println("------------------------");
+        for (User user : users) {
+            System.out.println(user);
+        }
+        System.out.println("------------------------");
     }
 
     public void pause() {

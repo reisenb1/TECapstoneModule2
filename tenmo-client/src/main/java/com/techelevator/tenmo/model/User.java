@@ -38,4 +38,10 @@ public class User {
     public int hashCode() {
         return Objects.hash(id, username);
     }
+
+    @Override
+    public String toString () {
+        String output = String.format("%d %15s %n", id, username);
+        return output;
+    }
 }
