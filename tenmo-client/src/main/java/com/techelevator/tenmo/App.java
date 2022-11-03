@@ -25,6 +25,8 @@ public class App {
         consoleService.printGreeting();
         loginMenu();
         if (currentUser != null) {
+            String token = currentUser.getToken();
+            tenmoService.setAuthToken(token);
             mainMenu();
         }
     }
@@ -89,6 +91,7 @@ public class App {
 	private void viewCurrentBalance() {
 		// TODO Auto-generated method stub
         String message = String.format("Your current account balance is: $%5.2f", tenmoService.getBalance());
+        System.out.println("-----------------------------");
         System.out.println(message);
 	}
 
