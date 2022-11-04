@@ -99,6 +99,12 @@ public class App {
 	private void viewTransferHistory() {
         List<Transfer> transfers = tenmoService.getMyPastTransfers();
 		consoleService.printAllTransfers(transfers);
+
+        int transferId = consoleService.promptForInt("Please enter transfer ID to view details (0 to cancel):");
+
+        Transfer transfer = tenmoService.getTransferByTransferId(transferId);
+
+
 	}
 
 	private void viewPendingRequests() {

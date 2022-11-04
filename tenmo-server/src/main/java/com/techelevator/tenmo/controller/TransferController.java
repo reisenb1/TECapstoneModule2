@@ -11,6 +11,7 @@ import java.util.List;
 
 @RestController
 @PreAuthorize("isAuthenticated()")
+@CrossOrigin
 public class TransferController {
 
     private final TransferDao transferDao;
@@ -22,9 +23,14 @@ public class TransferController {
         this.transferService = transferService;
     }
 
-    @GetMapping("/transfers")
-    public List<Transfer> getAllTransfers() {
-        return transferService.getAllTransfers();
+    @GetMapping("/transfersTo")
+    public List<Transfer> getAllToTransfers() {
+        return transferService.getAllToTransfers();
+    }
+
+    @GetMapping("/transfersFrom")
+    public List<Transfer> getAllFromTransfers() {
+        return transferService.getAllFromTransfers();
     }
 
     @GetMapping("/transfers/{id}")

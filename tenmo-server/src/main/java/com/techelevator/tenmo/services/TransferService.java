@@ -14,8 +14,12 @@ public class TransferService {
         this.transferDao = transferDao;
     }
 
-    public List<Transfer> getAllTransfers() {
-        return transferDao.getAllTransfers();
+    public List<Transfer> getAllToTransfers() {
+        return transferDao.getAllToTransfers();
+    }
+
+    public List<Transfer> getAllFromTransfers() {
+        return transferDao.getAllFromTransfers();
     }
 
     public Transfer getTransferByTransferId(Integer id) {

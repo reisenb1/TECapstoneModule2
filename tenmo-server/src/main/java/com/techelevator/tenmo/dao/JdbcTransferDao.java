@@ -21,8 +21,19 @@ public class JdbcTransferDao implements TransferDao {
     }
 
     @Override
-    public List<Transfer> getAllTransfers() {
-        String sql = "SELECT * FROM transfer";
+    public List<Transfer> getAllToTransfers() {
+        String sql = "SELECT * FROM transfer JOIN account ON transfer.account_to = account.account_id" +
+                " JOIN tenmo_user ON (account.user_id = tenmo_user.user_id) WHERE transfer_type_id = 2;";
+
+        List<Transfer> transfers = jdbcTemplate.query(sql, new TransferRowMapper());
+
+        return transfers;
+    }
+
+    @Override
+    public List<Transfer> getAllFromTransfers() {
+        String sql = "SELECT * FROM transfer JOIN account ON transfer.account_from = account.account_id " +
+                "JOIN tenmo_user ON (account.user_id = tenmo_user.user_id) WHERE transfer_type_id = 1;";
 
         List<Transfer> transfers = jdbcTemplate.query(sql, new TransferRowMapper());
 
@@ -31,7 +42,8 @@ public class JdbcTransferDao implements TransferDao {
 
     @Override
     public Transfer getTransferByTransferId(Integer id) {
-        String sql = "SELECT * FROM transfer WHERE transfer_id = ?";
+        String sql = "SELECT * FROM transfer JOIN  account ON transfer.account_from = account.account_id " +
+                "JOIN tenmo_user ON (account.user_id = tenmo_user.user_id) WHERE transfer_id = ?";
 
         List<Transfer> transfer = jdbcTemplate.query(sql, new TransferRowMapper(), id);
         if (transfer.size() > 0 ) {
@@ -64,6 +76,7 @@ public class JdbcTransferDao implements TransferDao {
             transfer.setAccountIdFrom(resultSet.getInt("account_from"));
             transfer.setAccountIdTo(resultSet.getInt("account_to"));
             transfer.setAmount(resultSet.getBigDecimal("amount"));
+            transfer.setUsername(resultSet.getString("username"));
             return transfer;
         }
     }

@@ -103,6 +103,18 @@ public class ConsoleService {
         }
     }
 
+    public void printTransfer(Transfer transfer) {
+        System.out.println("------------------------");
+        System.out.println("Transfer Details");
+        System.out.println("------------------------");
+        System.out.println("ID: " + transfer.getTransferId());
+
+        if (transfer.getTransferTypeId() == 2) {
+            System.out.println("From: " + transfer.getUsername());
+        }
+       
+    }
+
     public void pause() {
         System.out.println("\nPress Enter to continue...");
         scanner.nextLine();

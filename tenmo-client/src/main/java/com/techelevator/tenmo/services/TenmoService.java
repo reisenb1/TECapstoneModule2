@@ -99,22 +99,44 @@ public class TenmoService {
     }
 
     public List<Transfer> getMyPastTransfers() {
-        String url = String.format("%stransfers", API_BASE_URL);
+        String url = String.format("%stransfersTo", API_BASE_URL);
 
         ResponseEntity<Transfer[]> response = restTemplate.exchange(url, HttpMethod.GET,
                 makeAuthEntity(), Transfer[].class);
-        Transfer[] transfers = response.getBody();
+        Transfer[] transfersTo = response.getBody();
+
+        url = String.format("%stransfersFrom", API_BASE_URL);
+
+        response = restTemplate.exchange(url, HttpMethod.GET,
+                makeAuthEntity(), Transfer[].class);
+        Transfer[] transfersFrom = response.getBody();
 
         Account myAccount = getMyAccount();
 
         List<Transfer> transferList = new ArrayList<>();
-        for (Transfer transfer : transfers) {
-            if (transfer.getAccountIdFrom() == myAccount.getAccountId() ||
-                    transfer.getAccountIdTo() == myAccount.getAccountId()) {
+        for (Transfer transfer : transfersTo) {
+            if (transfer.getAccountIdFrom() == myAccount.getAccountId()) {
+                transferList.add(transfer);
+            }
+        }
+
+        for (Transfer transfer : transfersFrom) {
+            if (transfer.getAccountIdTo() == myAccount.getAccountId()) {
                 transferList.add(transfer);
             }
         }
         return transferList;
+    }
+
+    public Transfer getTransferByTransferId (int id) {
+        String url = String.format("%stransfers/%d", API_BASE_URL, id);
+
+        ResponseEntity<Transfer> response = restTemplate.exchange(url, HttpMethod.GET,
+                makeAuthEntity(), Transfer.class);
+
+        Transfer transfer = response.getBody();
+
+        return transfer;
     }
 
     public HttpEntity<Void> makeAuthEntity() {
