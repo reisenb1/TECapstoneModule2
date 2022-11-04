@@ -18,4 +18,12 @@ public class AccountService {
     public Account getAccountByUserId(int id) {
         return accountDao.getAccountByUserId(id);
     }
+
+    public Account getAccountByAccountId(int id) {
+        return accountDao.getAccountByAccountId(id);
+    }
+
+    public boolean update(Account updatedAccount, int userId) {
+        return accountDao.update(updatedAccount, userId);
+    }
 }

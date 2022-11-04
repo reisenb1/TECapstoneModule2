@@ -1,10 +1,12 @@
 package com.techelevator.tenmo.services;
 
 
+import com.techelevator.tenmo.model.Transfer;
 import com.techelevator.tenmo.model.User;
 import com.techelevator.tenmo.model.UserCredentials;
 
 import java.math.BigDecimal;
+import java.util.List;
 import java.util.Scanner;
 
 public class ConsoleService {
@@ -89,6 +91,16 @@ public class ConsoleService {
             System.out.println(user);
         }
         System.out.println("------------------------");
+    }
+
+    public void printAllTransfers(List<Transfer> transfers) {
+        System.out.println("------------------------");
+        System.out.println("Transfers");
+        System.out.println("ID     From/To    Amount");
+        System.out.println("------------------------");
+        for (Transfer transfer : transfers) {
+            System.out.println(transfer);
+        }
     }
 
     public void pause() {

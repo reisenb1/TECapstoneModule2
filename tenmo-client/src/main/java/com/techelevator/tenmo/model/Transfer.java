@@ -1,11 +1,10 @@
 package com.techelevator.tenmo.model;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
+import com.techelevator.tenmo.services.TenmoService;
 
 import java.math.BigDecimal;
 
 public class Transfer {
-
 
     private int transferId;
     private int transferTypeId;
@@ -14,8 +13,7 @@ public class Transfer {
     private int accountIdTo;
     private BigDecimal amount;
 
-    public Transfer () {
-
+    public Transfer() {
     }
 
     public Transfer(int transferId, int transferTypeId, int transferStatusId, int accountIdFrom, int accountIdTo, BigDecimal amount) {
@@ -73,5 +71,20 @@ public class Transfer {
 
     public void setAmount(BigDecimal amount) {
         this.amount = amount;
+    }
+
+    @Override
+    public String toString () {
+        String typeDescription = new String();
+        TenmoService tenmoService = new TenmoService();
+
+        if (transferTypeId == 2) {
+            typeDescription = "To";
+            Account toAccount = tenmoService.getAccountByAccountId(accountIdTo);
+        } else if (transferTypeId == 1) {
+            typeDescription = "From";
+        }
+        String output = String.format("%d %15s: %n", transferId, typeDescription);
+        return output;
     }
 }

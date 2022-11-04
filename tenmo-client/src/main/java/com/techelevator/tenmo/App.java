@@ -1,8 +1,6 @@
 package com.techelevator.tenmo;
 
-import com.techelevator.tenmo.model.AuthenticatedUser;
-import com.techelevator.tenmo.model.User;
-import com.techelevator.tenmo.model.UserCredentials;
+import com.techelevator.tenmo.model.*;
 import com.techelevator.tenmo.services.AuthenticationService;
 import com.techelevator.tenmo.services.ConsoleService;
 import com.techelevator.tenmo.services.TenmoService;
@@ -99,12 +97,13 @@ public class App {
 	}
 
 	private void viewTransferHistory() {
-		// TODO Auto-generated method stub
-		
+        List<Transfer> transfers = tenmoService.getMyPastTransfers();
+		consoleService.printAllTransfers(transfers);
 	}
 
 	private void viewPendingRequests() {
 		// TODO Auto-generated method stub
+
 		
 	}
 
@@ -126,7 +125,24 @@ public class App {
             System.out.println("Cannot transfer more money than is in your account.");
             sendBucks();
         }
-		
+
+        Account toAccount = tenmoService.getAccount(userId);
+        toAccount.setBalance(toAccount.getBalance().add(amount));
+        tenmoService.updateAccount(toAccount);
+
+        Account fromAccount = tenmoService.getMyAccount();
+        fromAccount.setBalance(fromAccount.getBalance().subtract(amount));
+        tenmoService.updateAccount(fromAccount);
+
+        Transfer newTransfer = new Transfer();
+        newTransfer.setTransferTypeId(2);
+        newTransfer.setTransferStatusId(2);
+        newTransfer.setAccountIdFrom(fromAccount.getAccountId());
+        newTransfer.setAccountIdTo(toAccount.getAccountId());
+        newTransfer.setAmount(amount);
+
+        tenmoService.createTransfer(newTransfer);
+
 	}
 
 	private void requestBucks() {

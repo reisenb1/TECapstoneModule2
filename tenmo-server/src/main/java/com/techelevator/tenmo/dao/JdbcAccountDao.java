@@ -4,8 +4,8 @@ import com.techelevator.tenmo.model.Account;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.stereotype.Component;
+import org.springframework.transaction.annotation.Transactional;
 
-import java.math.BigDecimal;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.List;
@@ -35,7 +35,32 @@ public class JdbcAccountDao implements AccountDao{
         }
 
         return null;
+    }
 
+    @Override
+    public Account getAccountByAccountId(int id) {
+        String sql = "SELECT * FROM account WHERE account_id = ?";
+
+        List<Account> accounts = jdbcTemplate.query(sql, new AccountRowMapper(), id);
+
+        if (accounts.size() > 0) {
+            return accounts.get(0);
+        }
+
+        return null;
+    }
+
+    @Override
+    @Transactional
+    public boolean update(Account updatedAccount, int userId) {
+        String sql = "UPDATE account SET account_id = ?, user_id = ?, balance = ? WHERE user_id = ?";
+
+        if (jdbcTemplate.update(sql, updatedAccount.getAccountId(), updatedAccount.getUserId(),
+                updatedAccount.getBalance(), updatedAccount.getUserId()) > 0) {
+            return true;
+        }
+
+        return false;
     }
 
     @Override

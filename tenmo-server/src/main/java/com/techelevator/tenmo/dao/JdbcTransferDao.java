@@ -5,6 +5,7 @@ import com.techelevator.tenmo.model.Transfer;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.stereotype.Component;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -20,19 +21,37 @@ public class JdbcTransferDao implements TransferDao {
     }
 
     @Override
-    public List<Transfer> getTransfersByUserId(int id) {
-        String sql = "SELECT * FROM transfer WHERE account_from = ? OR account_to = ?";
+    public List<Transfer> getAllTransfers() {
+        String sql = "SELECT * FROM transfer";
 
-        JdbcAccountDao jdbcAccountDao =  new JdbcAccountDao(jdbcTemplate);
-        int accountId =  jdbcAccountDao.getAccountByUserId(id).getAccountId();
+        List<Transfer> transfers = jdbcTemplate.query(sql, new TransferRowMapper());
 
-        List<Transfer> transfers = jdbcTemplate.query(sql, new TransferRowMapper(), accountId, accountId);
         return transfers;
     }
 
     @Override
-    public Transfer getTransferByTransferId(int id) {
+    public Transfer getTransferByTransferId(Integer id) {
+        String sql = "SELECT * FROM transfer WHERE transfer_id = ?";
+
+        List<Transfer> transfer = jdbcTemplate.query(sql, new TransferRowMapper(), id);
+        if (transfer.size() > 0 ) {
+            return transfer.get(0);
+        }
         return null;
+    }
+
+    @Override
+    @Transactional
+    public Transfer create(Transfer newTransfer) {
+        String sql = "INSERT INTO transfer(transfer_type_id, " +
+                "transfer_status_id, account_from, account_to, amount) " +
+                "VALUES (?, ?, ?, ?, ?) RETURNING transfer_id";
+
+        Integer newTransferId = jdbcTemplate.queryForObject(sql, Integer.class, newTransfer.getTransferTypeId(),
+                newTransfer.getTransferStatusId(), newTransfer.getAccountIdFrom(), newTransfer.getAccountIdTo(),
+                newTransfer.getAmount());
+
+        return getTransferByTransferId(newTransferId);
     }
 
     private class TransferRowMapper implements RowMapper<Transfer> {
@@ -44,6 +63,7 @@ public class JdbcTransferDao implements TransferDao {
             transfer.setTransferStatusId(resultSet.getInt("transfer_status_id"));
             transfer.setAccountIdFrom(resultSet.getInt("account_from"));
             transfer.setAccountIdTo(resultSet.getInt("account_to"));
+            transfer.setAmount(resultSet.getBigDecimal("amount"));
             return transfer;
         }
     }
