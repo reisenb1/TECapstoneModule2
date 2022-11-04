@@ -23,4 +23,8 @@ public class UserService {
         return userDao.getUserById(id);
     }
 
+    public User getByAccountId(int id) {
+        return userDao.getByAccountId(id);
+    }
+
 }

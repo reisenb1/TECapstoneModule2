@@ -101,9 +101,13 @@ public class App {
 		consoleService.printAllTransfers(transfers);
 
         int transferId = consoleService.promptForInt("Please enter transfer ID to view details (0 to cancel):");
+        if (transferId == 0) {
+            return;
+        }
 
         Transfer transfer = tenmoService.getTransferByTransferId(transferId);
-
+        User user = tenmoService.getUserByAccountId(transfer.getAccountIdTo());
+        consoleService.printTransfer(transfer, user);
 
 	}
 
@@ -120,16 +124,18 @@ public class App {
         int userId = consoleService.promptForInt("Enter ID of user you are sending to (0 to cancel):");
         if (userId == currentUser.getUser().getId()) {
             System.out.println("Cannot transfer money to yourself.");
-            sendBucks();
+            return;
+        } else if (userId == 0) {
+            return;
         }
         BigDecimal amount = consoleService.promptForBigDecimal("Enter amount:");
 
         if (amount.compareTo(new BigDecimal(0.00)) <= 0) {
             System.out.println("Must transfer an amount over $0.00.");
-            sendBucks();
+            return;
         } else if (amount.compareTo(tenmoService.getBalance()) > 0) {
             System.out.println("Cannot transfer more money than is in your account.");
-            sendBucks();
+            return;
         }
 
         Account toAccount = tenmoService.getAccount(userId);

@@ -13,11 +13,15 @@ public class Transfer {
     private int accountIdTo;
     private BigDecimal amount;
     private String username;
+    private String transferStatusDesc;
+    private String transferTypeDesc;
 
     public Transfer() {
     }
 
-    public Transfer(int transferId, int transferTypeId, int transferStatusId, int accountIdFrom, int accountIdTo, BigDecimal amount, String username) {
+    public Transfer(int transferId, int transferTypeId, int transferStatusId, int accountIdFrom,
+                    int accountIdTo, BigDecimal amount, String username, String transferStatusDesc,
+                     String transferTypeDesc) {
         this.transferId = transferId;
         this.transferTypeId = transferTypeId;
         this.transferStatusId = transferStatusId;
@@ -25,6 +29,8 @@ public class Transfer {
         this.accountIdTo = accountIdTo;
         this.amount = amount;
         this.username = username;
+        this.transferStatusDesc = transferStatusDesc;
+        this.transferTypeDesc = transferTypeDesc;
     }
 
     public int getTransferId() {
@@ -81,6 +87,22 @@ public class Transfer {
 
     public void setUsername(String username) {
         this.username = username;
+    }
+
+    public String getTransferStatusDesc() {
+        return transferStatusDesc;
+    }
+
+    public void setTransferStatusDesc(String transferStatusDesc) {
+        this.transferStatusDesc = transferStatusDesc;
+    }
+
+    public String getTransferTypeDesc() {
+        return transferTypeDesc;
+    }
+
+    public void setTransferTypeDesc(String transferTypeDesc) {
+        this.transferTypeDesc = transferTypeDesc;
     }
 
     @Override

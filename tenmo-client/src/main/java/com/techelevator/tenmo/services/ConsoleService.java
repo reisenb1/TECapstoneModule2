@@ -103,7 +103,7 @@ public class ConsoleService {
         }
     }
 
-    public void printTransfer(Transfer transfer) {
+    public void printTransfer(Transfer transfer, User user) {
         System.out.println("------------------------");
         System.out.println("Transfer Details");
         System.out.println("------------------------");
@@ -111,8 +111,13 @@ public class ConsoleService {
 
         if (transfer.getTransferTypeId() == 2) {
             System.out.println("From: " + transfer.getUsername());
+            System.out.println("To: " + user.getUsername());
+        } else if (transfer.getTransferTypeId() == 1) {
+            System.out.println("From: " + user.getUsername());
         }
-       
+        System.out.println("Type: " + transfer.getTransferTypeDesc());
+        System.out.println("Status: " + transfer.getTransferStatusDesc());
+        System.out.println("Amount: $" + transfer.getAmount());
     }
 
     public void pause() {

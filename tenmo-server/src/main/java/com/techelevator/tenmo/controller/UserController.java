@@ -33,4 +33,9 @@ public class UserController {
         return userService.getById(id);
     }
 
+    @GetMapping("/userByAccountId/{accountId}")
+    public User getByAccountId(@PathVariable int accountId) {
+        return userService.getByAccountId(accountId);
+    }
+
 }

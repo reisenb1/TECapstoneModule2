@@ -30,7 +30,7 @@ public class TenmoService {
 
         return account.getBalance();
     }
-    public User[] getAllUsers () {
+    public User[] getAllUsers() {
         String url = String.format("%susers", API_BASE_URL);
 
         ResponseEntity<User[]> response = restTemplate.exchange(url, HttpMethod.GET,
@@ -38,6 +38,17 @@ public class TenmoService {
         User[] users = response.getBody();
 
         return users;
+    }
+
+    public User getUserByAccountId(int id) {
+        String url = String.format("%suserByAccountId/%d", API_BASE_URL, id);
+
+        ResponseEntity<User> response = restTemplate.exchange(url, HttpMethod.GET,
+                makeAuthEntity(), User.class);
+        User user = response.getBody();
+
+        return user;
+
     }
 
     public Account getMyAccount() {
